@@ -1,14 +1,12 @@
 const aqiValue = document.getElementById("aqiValue");
-const aqiStatus = document.getElementById("aqiStatus");
-const connectionStatus = document.getElementById("connectionStatus");
+const aqiText = document.getElementById("aqiText");
+const statusBar = document.getElementById("status");
+const cardsContainer = document.getElementById("cards");
 
-// Format helper
-function formatNumber(value, decimals = 2) {
-  return Number(value).toFixed(decimals);
-}
+let chart;
+let chartData = [];
 
-// AQI Category + Color
-function getAQIStatus(aqi) {
+function getAQIInfo(aqi) {
   if (aqi <= 50) return { text: "GOOD", color: "#00e400" };
   if (aqi <= 100) return { text: "MODERATE", color: "#ffff00" };
   if (aqi <= 150) return { text: "UNHEALTHY (Sensitive)", color: "#ff7e00" };
@@ -17,47 +15,86 @@ function getAQIStatus(aqi) {
   return { text: "HAZARDOUS", color: "#7e0023" };
 }
 
-// Fetch latest data
 async function fetchData() {
   try {
     const response = await fetch("/api/data");
-
-    if (!response.ok) {
-      connectionStatus.textContent = "Server Error";
-      return;
-    }
-
     const data = await response.json();
 
-    connectionStatus.textContent = "Connected to server";
-
-    // Round AQI
     const roundedAQI = Math.round(data.overall || 0);
 
+    // Update AQI number
     aqiValue.textContent = roundedAQI;
 
-    const statusInfo = getAQIStatus(roundedAQI);
+    // Update AQI status
+    const info = getAQIInfo(roundedAQI);
+    aqiValue.style.color = info.color;
+    aqiText.textContent = info.text;
 
-    aqiValue.style.color = statusInfo.color;
-    aqiStatus.textContent = statusInfo.text;
+    // Update footer status
+    statusBar.textContent = "Connected to server";
 
-    // Update parameter cards
-    document.getElementById("pm25").textContent = formatNumber(data.pm25);
-    document.getElementById("pm10").textContent = formatNumber(data.pm10);
-    document.getElementById("co").textContent = formatNumber(data.co);
-    document.getElementById("voc").textContent = formatNumber(data.voc);
-    document.getElementById("so2").textContent = formatNumber(data.so2);
-    document.getElementById("no2").textContent = formatNumber(data.no2);
-    document.getElementById("nh3").textContent = formatNumber(data.nh3);
-    document.getElementById("temperature").textContent = formatNumber(data.temperature, 1);
-    document.getElementById("humidity").textContent = formatNumber(data.humidity, 0);
+    // Update cards
+    cardsContainer.innerHTML = `
+      <div class="card">PM2.5<br>${data.pm25.toFixed(2)}</div>
+      <div class="card">PM10<br>${data.pm10.toFixed(2)}</div>
+      <div class="card">CO<br>${data.co.toFixed(2)}</div>
+      <div class="card">VOC<br>${data.voc.toFixed(2)}</div>
+      <div class="card">SO2<br>${data.so2.toFixed(2)}</div>
+      <div class="card">NO2<br>${data.no2.toFixed(2)}</div>
+      <div class="card">NH3<br>${data.nh3.toFixed(2)}</div>
+      <div class="card">Temp<br>${data.temperature.toFixed(1)}</div>
+      <div class="card">Humidity<br>${data.humidity.toFixed(0)}</div>
+    `;
+
+    updateChart(roundedAQI);
 
   } catch (error) {
-    console.error("Fetch error:", error);
-    connectionStatus.textContent = "Connecting to server...";
+    statusBar.textContent = "Connecting to server...";
+    console.error(error);
   }
 }
 
-// Refresh every 5 seconds
-setInterval(fetchData, 5000);
+function initChart() {
+  const ctx = document.getElementById("aqiChart").getContext("2d");
+
+  chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: [],
+      datasets: [{
+        label: "AQI Trend",
+        data: [],
+        borderColor: "#007bff",
+        fill: false,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 300
+        }
+      }
+    }
+  });
+}
+
+function updateChart(aqi) {
+  const now = new Date().toLocaleTimeString();
+
+  chart.data.labels.push(now);
+  chart.data.datasets[0].data.push(aqi);
+
+  if (chart.data.labels.length > 15) {
+    chart.data.labels.shift();
+    chart.data.datasets[0].data.shift();
+  }
+
+  chart.update();
+}
+
+initChart();
 fetchData();
+setInterval(fetchData, 5000);
