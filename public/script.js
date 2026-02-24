@@ -1,12 +1,13 @@
 const aqiValue = document.getElementById("aqiValue");
 const aqiStatus = document.getElementById("aqiStatus");
+const connectionStatus = document.getElementById("connectionStatus");
 
 // Format helper
 function formatNumber(value, decimals = 2) {
   return Number(value).toFixed(decimals);
 }
 
-// AQI Category
+// AQI Category + Color
 function getAQIStatus(aqi) {
   if (aqi <= 50) return { text: "GOOD", color: "#00e400" };
   if (aqi <= 100) return { text: "MODERATE", color: "#ffff00" };
@@ -16,18 +17,27 @@ function getAQIStatus(aqi) {
   return { text: "HAZARDOUS", color: "#7e0023" };
 }
 
-// Fetch Latest Data
+// Fetch latest data
 async function fetchData() {
   try {
     const response = await fetch("/api/data");
+
+    if (!response.ok) {
+      connectionStatus.textContent = "Server Error";
+      return;
+    }
+
     const data = await response.json();
 
-    // 🔥 FIX: Round AQI
+    connectionStatus.textContent = "Connected to server";
+
+    // Round AQI
     const roundedAQI = Math.round(data.overall || 0);
 
     aqiValue.textContent = roundedAQI;
 
     const statusInfo = getAQIStatus(roundedAQI);
+
     aqiValue.style.color = statusInfo.color;
     aqiStatus.textContent = statusInfo.text;
 
@@ -43,10 +53,11 @@ async function fetchData() {
     document.getElementById("humidity").textContent = formatNumber(data.humidity, 0);
 
   } catch (error) {
-    console.error("Error fetching data:", error);
+    console.error("Fetch error:", error);
+    connectionStatus.textContent = "Connecting to server...";
   }
 }
 
-// Auto refresh every 5 seconds
+// Refresh every 5 seconds
 setInterval(fetchData, 5000);
 fetchData();
