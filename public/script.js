@@ -1,92 +1,52 @@
-const ctx = document.getElementById("aqiChart").getContext("2d");
+const aqiValue = document.getElementById("aqiValue");
+const aqiStatus = document.getElementById("aqiStatus");
 
-const chart = new Chart(ctx, {
-  type: "line",
-  data: {
-    labels: [],
-    datasets: [{
-      label: "AQI Trend",
-      data: [],
-      borderColor: "#0078d7",
-      borderWidth: 2,
-      fill: false
-    }]
-  }
-});
-
-function getColor(aqi) {
-  if (aqi <= 50) return "#00e400";
-  if (aqi <= 100) return "#ffff00";
-  if (aqi <= 200) return "#ff7e00";
-  if (aqi <= 300) return "#ff0000";
-  return "#7e0023";
+// Format helper
+function formatNumber(value, decimals = 2) {
+  return Number(value).toFixed(decimals);
 }
 
-function getText(aqi) {
-  if (aqi <= 50) return "GOOD";
-  if (aqi <= 100) return "MODERATE";
-  if (aqi <= 200) return "UNHEALTHY";
-  if (aqi <= 300) return "VERY UNHEALTHY";
-  return "HAZARDOUS";
+// AQI Category
+function getAQIStatus(aqi) {
+  if (aqi <= 50) return { text: "GOOD", color: "#00e400" };
+  if (aqi <= 100) return { text: "MODERATE", color: "#ffff00" };
+  if (aqi <= 150) return { text: "UNHEALTHY (Sensitive)", color: "#ff7e00" };
+  if (aqi <= 200) return { text: "UNHEALTHY", color: "#ff0000" };
+  if (aqi <= 300) return { text: "VERY UNHEALTHY", color: "#8f3f97" };
+  return { text: "HAZARDOUS", color: "#7e0023" };
 }
 
-async function fetchLatest() {
+// Fetch Latest Data
+async function fetchData() {
   try {
-    const res = await fetch("/api/data");
-    const data = await res.json();
+    const response = await fetch("/api/data");
+    const data = await response.json();
 
-    const aqi = data.overall || 0;
+    // 🔥 FIX: Round AQI
+    const roundedAQI = Math.round(data.overall || 0);
 
-    document.getElementById("aqiValue").innerText = aqi;
-    document.getElementById("aqiValue").style.color = getColor(aqi);
-    document.getElementById("aqiText").innerText = getText(aqi);
+    aqiValue.textContent = roundedAQI;
 
-    document.body.style.background = getColor(aqi) + "20";
+    const statusInfo = getAQIStatus(roundedAQI);
+    aqiValue.style.color = statusInfo.color;
+    aqiStatus.textContent = statusInfo.text;
 
-    const pollutants = [
-      {name:"PM2.5", val:data.pm25},
-      {name:"PM10", val:data.pm10},
-      {name:"CO", val:data.co},
-      {name:"VOC", val:data.voc},
-      {name:"SO2", val:data.so2},
-      {name:"NO2", val:data.no2},
-      {name:"NH3", val:data.nh3},
-      {name:"Temp", val:data.temperature},
-      {name:"Humidity", val:data.humidity}
-    ];
+    // Update parameter cards
+    document.getElementById("pm25").textContent = formatNumber(data.pm25);
+    document.getElementById("pm10").textContent = formatNumber(data.pm10);
+    document.getElementById("co").textContent = formatNumber(data.co);
+    document.getElementById("voc").textContent = formatNumber(data.voc);
+    document.getElementById("so2").textContent = formatNumber(data.so2);
+    document.getElementById("no2").textContent = formatNumber(data.no2);
+    document.getElementById("nh3").textContent = formatNumber(data.nh3);
+    document.getElementById("temperature").textContent = formatNumber(data.temperature, 1);
+    document.getElementById("humidity").textContent = formatNumber(data.humidity, 0);
 
-    document.getElementById("cards").innerHTML =
-      pollutants.map(p =>
-        `<div class="card">
-          <h3>${p.name}</h3>
-          <h2>${p.val || 0}</h2>
-        </div>`
-      ).join("");
-
-    document.getElementById("status").innerText = "Live Data";
-
-  } catch {
-    document.getElementById("status").innerText = "Connection Error";
+  } catch (error) {
+    console.error("Error fetching data:", error);
   }
 }
 
-async function fetchHistory() {
-  const res = await fetch("/api/history");
-  const data = await res.json();
-
-  chart.data.labels = data.map(d =>
-    new Date(d.timestamp).toLocaleTimeString()
-  );
-
-  chart.data.datasets[0].data = data.map(d => d.overall);
-
-  chart.update();
-}
-
-async function update() {
-  await fetchLatest();
-  await fetchHistory();
-}
-
-setInterval(update, 5000);
-update();
+// Auto refresh every 5 seconds
+setInterval(fetchData, 5000);
+fetchData();
