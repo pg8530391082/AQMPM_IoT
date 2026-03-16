@@ -1,33 +1,156 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>AQMPM Live Dashboard</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Air Quality Monitoring System</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
+
 <body>
 
-<header>
-  🌍 AQMPM – Live Air Quality Dashboard
+
+<header class="header">
+
+<img src="logo.png" class="logo">
+
+<h1>Air Quality & Pollution Monitoring System</h1>
+
 </header>
 
-<section class="aqi-box">
-  <h2>Overall AQI</h2>
-  <div id="aqiValue">--</div>
-  <div id="aqiText">Waiting for sensor data...</div>
+
+
+<section class="aqi-section">
+
+<div id="aqiCard" class="aqi-card">
+
+<h2>Overall AQI</h2>
+
+<div class="gauge">
+
+<svg width="200" height="120">
+
+<path d="M20 100 A80 80 0 0 1 180 100"
+stroke="#ddd"
+stroke-width="15"
+fill="none"/>
+
+<path id="aqiGauge"
+d="M20 100 A80 80 0 0 1 180 100"
+stroke="#22c55e"
+stroke-width="15"
+fill="none"
+stroke-dasharray="251"
+stroke-dashoffset="251"/>
+
+</svg>
+
+<div id="aqiNumber">0</div>
+
+</div>
+
+<div id="aqiStatus">Good</div>
+
+</div>
+
 </section>
 
-<section class="grid" id="cards"></section>
 
-<section class="chart-section">
-  <canvas id="aqiChart"></canvas>
+
+<section class="sensor-section">
+
+<div class="sensor-grid">
+
+<div class="sensor-card"><h3>PM2.5</h3><p id="pm25">--</p></div>
+<div class="sensor-card"><h3>PM10</h3><p id="pm10">--</p></div>
+<div class="sensor-card"><h3>CO</h3><p id="co">--</p></div>
+<div class="sensor-card"><h3>VOC</h3><p id="voc">--</p></div>
+<div class="sensor-card"><h3>SO₂</h3><p id="so2">--</p></div>
+<div class="sensor-card"><h3>NO₂</h3><p id="no2">--</p></div>
+<div class="sensor-card"><h3>NH₃</h3><p id="nh3">--</p></div>
+<div class="sensor-card"><h3>Temperature</h3><p id="temp">--</p></div>
+
+</div>
+
 </section>
 
-<footer id="status">
-  Connecting to server...
+
+
+<section class="graph-section">
+
+<h2>Air Quality Trends</h2>
+
+<div class="graph-grid">
+
+<div class="graph-box">
+<canvas id="aqiChart"></canvas>
+</div>
+
+<div class="graph-box">
+<canvas id="tempChart"></canvas>
+</div>
+
+<div class="graph-box">
+<canvas id="humidityChart"></canvas>
+</div>
+
+</div>
+
+</section>
+
+
+
+<section class="trend-section">
+
+<h2>Weekly AQI Trend</h2>
+
+<div class="trend-graph">
+
+<canvas id="aqiDayChart"></canvas>
+
+</div>
+
+</section>
+
+
+
+<section class="awareness-section">
+
+<h2>Health Effects of Pollutants</h2>
+
+<div class="awareness-grid">
+
+<div class="info-card"><h3>PM2.5 / PM10</h3><p>Fine particles that damage lungs.</p></div>
+<div class="info-card"><h3>CO</h3><p>Reduces oxygen delivery in blood.</p></div>
+<div class="info-card"><h3>VOC</h3><p>Causes irritation and organ damage.</p></div>
+<div class="info-card"><h3>NO₂</h3><p>Causes breathing problems.</p></div>
+<div class="info-card"><h3>SO₂</h3><p>Triggers asthma and lung irritation.</p></div>
+<div class="info-card"><h3>NH₃</h3><p>Irritates eyes and respiratory tract.</p></div>
+
+</div>
+
+</section>
+
+
+
+<footer>
+
+<p>Smart Air Quality Monitoring System</p>
+<p>Designed & Developed by @Piyush</p>
+
 </footer>
 
+
+
 <script src="script.js"></script>
+
 </body>
+
 </html>
