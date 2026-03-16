@@ -9,7 +9,7 @@ app.use(express.json())
 
 app.use(express.static(path.join(__dirname,"public")))
 
-let sensorData={
+let sensorData = {
 aqi:0,
 pm25:0,
 pm10:0,
@@ -23,20 +23,17 @@ humidity:0
 }
 
 app.post("/update",(req,res)=>{
-sensorData=req.body
-console.log("New data:",sensorData)
-res.json({status:"ok"})
+sensorData = req.body
+console.log("New Sensor Data:",sensorData)
+res.json({status:"received"})
 })
 
 app.get("/data",(req,res)=>{
 res.json(sensorData)
 })
 
-const PORT=process.env.PORT || 3000
+const PORT = process.env.PORT || 3000
 
 app.listen(PORT,()=>{
-console.log("Server running")
+console.log("Server running on port",PORT)
 })
-app.listen(PORT, () => {
-  console.log(`🚀 AQMPM Server running on port ${PORT}`);
-});
