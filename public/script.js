@@ -1,50 +1,233 @@
-const gauge = document.getElementById("aqiGauge")
+/* ---------------- AQI CATEGORY LOGIC ---------------- */
 
-function updateAQI(aqi){
+function getAQICategory(aqi){
 
-document.getElementById("aqiNumber").innerText = aqi
+if(aqi <= 50) return ["Good","good"]
+if(aqi <= 100) return ["Satisfactory","satisfactory"]
+if(aqi <= 200) return ["Moderate","moderate"]
+if(aqi <= 300) return ["Poor","poor"]
+if(aqi <= 400) return ["Very Poor","verypoor"]
+return ["Severe","severe"]
 
-const percent = aqi / 300
-const offset = 251 - (251 * percent)
-
-gauge.style.strokeDashoffset = offset
-
-let status = ""
-let glow = ""
-
-if(aqi <= 50){
-status="Good"
-glow="good-glow"
-gauge.style.stroke="#22c55e"
-}
-else if(aqi <= 100){
-status="Moderate"
-glow="moderate-glow"
-gauge.style.stroke="#facc15"
-}
-else if(aqi <= 150){
-status="Unhealthy"
-glow="unhealthy-glow"
-gauge.style.stroke="#fb923c"
-}
-else if(aqi <= 200){
-status="Poor"
-glow="poor-glow"
-gauge.style.stroke="#ef4444"
-}
-else{
-status="Hazardous"
-glow="hazardous-glow"
-gauge.style.stroke="#a855f7"
-}
-
-document.getElementById("aqiStatus").innerText = status
-
-let card = document.getElementById("aqiCard")
-card.className = "aqi-card " + glow
 }
 
 
+/* ---------------- UPDATE SENSOR CARD ---------------- */
+
+function updateCard(id,value){
+
+let [label,css] = getAQICategory(value)
+
+document.getElementById(id).innerText = value
+document.getElementById(id+"Status").innerText = label
+
+let card = document.getElementById("card-"+id)
+card.className = "sensor-card " + css
+
+}
+
+
+/* ---------------- CHART VARIABLES ---------------- */
+
+let aqiChart
+let tempChart
+let humidityChart
+let weeklyChart
+
+
+/* ---------------- INITIALIZE CHARTS ---------------- */
+
+function initCharts(){
+
+/* AQI CHART */
+
+const aqiCtx = document.getElementById("aqiChart").getContext("2d")
+
+const aqiGradient = aqiCtx.createLinearGradient(0,0,0,300)
+aqiGradient.addColorStop(0,"rgba(255,140,0,0.6)")
+aqiGradient.addColorStop(1,"rgba(255,140,0,0)")
+
+aqiChart = new Chart(aqiCtx,{
+
+type:"line",
+
+data:{
+labels:[],
+datasets:[{
+label:"AQI Index",
+data:[],
+borderColor:"#ff8c00",
+backgroundColor:aqiGradient,
+fill:true,
+tension:0.4
+}]
+},
+
+options:{
+responsive:true,
+scales:{
+x:{
+title:{
+display:true,
+text:"Time"
+}
+},
+y:{
+title:{
+display:true,
+text:"AQI"
+}
+}
+}
+}
+
+})
+
+
+
+/* TEMPERATURE CHART */
+
+const tempCtx = document.getElementById("tempChart").getContext("2d")
+
+const tempGradient = tempCtx.createLinearGradient(0,0,0,300)
+tempGradient.addColorStop(0,"rgba(255,99,132,0.6)")
+tempGradient.addColorStop(1,"rgba(255,99,132,0)")
+
+tempChart = new Chart(tempCtx,{
+
+type:"line",
+
+data:{
+labels:[],
+datasets:[{
+label:"Temperature (°C)",
+data:[],
+borderColor:"#ff4d6d",
+backgroundColor:tempGradient,
+fill:true,
+tension:0.4
+}]
+},
+
+options:{
+scales:{
+x:{title:{display:true,text:"Time"}},
+y:{title:{display:true,text:"Temperature"}}
+}
+}
+
+})
+
+
+
+/* HUMIDITY CHART */
+
+const humCtx = document.getElementById("humidityChart").getContext("2d")
+
+const humGradient = humCtx.createLinearGradient(0,0,0,300)
+humGradient.addColorStop(0,"rgba(54,162,235,0.6)")
+humGradient.addColorStop(1,"rgba(54,162,235,0)")
+
+humidityChart = new Chart(humCtx,{
+
+type:"line",
+
+data:{
+labels:[],
+datasets:[{
+label:"Humidity (%)",
+data:[],
+borderColor:"#36a2eb",
+backgroundColor:humGradient,
+fill:true,
+tension:0.4
+}]
+},
+
+options:{
+scales:{
+x:{title:{display:true,text:"Time"}},
+y:{title:{display:true,text:"Humidity"}}
+}
+}
+
+})
+
+
+
+/* WEEKLY AQI BAR CHART */
+
+weeklyChart = new Chart(document.getElementById("aqiDayChart"),{
+
+type:"bar",
+
+data:{
+labels:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+datasets:[{
+label:"Weekly AQI",
+data:[0,0,0,0,0,0,0],
+backgroundColor:[
+"#4CAF50",
+"#8BC34A",
+"#FFC107",
+"#FF9800",
+"#F44336",
+"#9C27B0",
+"#673AB7"
+]
+}]
+},
+
+options:{
+scales:{
+x:{title:{display:true,text:"Day"}},
+y:{title:{display:true,text:"AQI"}}
+}
+}
+
+})
+
+}
+
+initCharts()
+
+
+/* ---------------- UPDATE GRAPH DATA ---------------- */
+
+function updateCharts(time,aqi,temp,humidity){
+
+aqiChart.data.labels.push(time)
+aqiChart.data.datasets[0].data.push(aqi)
+
+tempChart.data.labels.push(time)
+tempChart.data.datasets[0].data.push(temp)
+
+humidityChart.data.labels.push(time)
+humidityChart.data.datasets[0].data.push(humidity)
+
+/* Limit to last 20 points */
+
+if(aqiChart.data.labels.length > 20){
+
+aqiChart.data.labels.shift()
+aqiChart.data.datasets[0].data.shift()
+
+tempChart.data.labels.shift()
+tempChart.data.datasets[0].data.shift()
+
+humidityChart.data.labels.shift()
+humidityChart.data.datasets[0].data.shift()
+
+}
+
+aqiChart.update()
+tempChart.update()
+humidityChart.update()
+
+}
+
+
+/* ---------------- FETCH SENSOR DATA ---------------- */
 
 async function fetchData(){
 
@@ -53,25 +236,32 @@ try{
 const response = await fetch("/data")
 const data = await response.json()
 
-updateAQI(data.aqi)
+updateCard("pm25",data.pm25)
+updateCard("pm10",data.pm10)
+updateCard("co",data.co)
+updateCard("voc",data.voc)
+updateCard("so2",data.so2)
+updateCard("no2",data.no2)
+updateCard("nh3",data.nh3)
 
-document.getElementById("pm25").innerText=data.pm25
-document.getElementById("pm10").innerText=data.pm10
-document.getElementById("co").innerText=data.co
-document.getElementById("voc").innerText=data.voc
-document.getElementById("so2").innerText=data.so2
-document.getElementById("no2").innerText=data.no2
-document.getElementById("nh3").innerText=data.nh3
-document.getElementById("temp").innerText=data.temperature
+document.getElementById("temp").innerText = data.temperature
+document.getElementById("humidity").innerText = data.humidity
+
+const time = new Date().toLocaleTimeString()
+
+updateCharts(time,data.aqi,data.temperature,data.humidity)
 
 }
 catch(error){
 
-console.log("Fetch error:",error)
+console.log("Data fetch error:",error)
 
 }
 
 }
+
+
+/* ---------------- AUTO UPDATE ---------------- */
 
 fetchData()
 
