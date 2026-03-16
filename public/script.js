@@ -1,33 +1,33 @@
-let gauge=document.getElementById("aqiGauge")
+const gauge = document.getElementById("aqiGauge")
 
 function updateAQI(aqi){
 
-document.getElementById("aqiNumber").innerText=aqi
+document.getElementById("aqiNumber").innerText = aqi
 
-let percent=aqi/300
-let offset=251-(251*percent)
+const percent = aqi / 300
+const offset = 251 - (251 * percent)
 
-gauge.style.strokeDashoffset=offset
+gauge.style.strokeDashoffset = offset
 
-let status=""
-let glow=""
+let status = ""
+let glow = ""
 
-if(aqi<=50){
+if(aqi <= 50){
 status="Good"
 glow="good-glow"
 gauge.style.stroke="#22c55e"
 }
-else if(aqi<=100){
+else if(aqi <= 100){
 status="Moderate"
 glow="moderate-glow"
 gauge.style.stroke="#facc15"
 }
-else if(aqi<=150){
+else if(aqi <= 150){
 status="Unhealthy"
 glow="unhealthy-glow"
 gauge.style.stroke="#fb923c"
 }
-else if(aqi<=200){
+else if(aqi <= 200){
 status="Poor"
 glow="poor-glow"
 gauge.style.stroke="#ef4444"
@@ -38,20 +38,20 @@ glow="hazardous-glow"
 gauge.style.stroke="#a855f7"
 }
 
-document.getElementById("aqiStatus").innerText=status
+document.getElementById("aqiStatus").innerText = status
 
-let card=document.getElementById("aqiCard")
-card.className="aqi-card "+glow
-
+let card = document.getElementById("aqiCard")
+card.className = "aqi-card " + glow
 }
 
 
 
 async function fetchData(){
 
-const response=await fetch("/data")
+try{
 
-const data=await response.json()
+const response = await fetch("/data")
+const data = await response.json()
 
 updateAQI(data.aqi)
 
@@ -65,5 +65,14 @@ document.getElementById("nh3").innerText=data.nh3
 document.getElementById("temp").innerText=data.temperature
 
 }
+catch(error){
+
+console.log("Fetch error:",error)
+
+}
+
+}
+
+fetchData()
 
 setInterval(fetchData,20000)
