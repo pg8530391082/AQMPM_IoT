@@ -6,63 +6,31 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Air Quality Monitoring System</title>
+<title>AQMPM | Air Quality Monitoring</title>
 
 <link rel="stylesheet" href="style.css">
+
+<link rel="icon" href="logo.png">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
+
 
 <body>
 
 
 <header class="header">
 
+<div class="header-container">
+
 <img src="logo.png" class="logo">
 
 <h1>Air Quality & Pollution Monitoring System</h1>
 
+</div>
+
 </header>
-
-
-
-<section class="aqi-section">
-
-<div id="aqiCard" class="aqi-card">
-
-<h2>Overall AQI</h2>
-
-<div class="gauge">
-
-<svg width="200" height="120">
-
-<path
-d="M20 100 A80 80 0 0 1 180 100"
-stroke="#ddd"
-stroke-width="15"
-fill="none"/>
-
-<path
-id="aqiGauge"
-d="M20 100 A80 80 0 0 1 180 100"
-stroke="#22c55e"
-stroke-width="15"
-fill="none"
-stroke-dasharray="251"
-stroke-dashoffset="251"/>
-
-</svg>
-
-<div id="aqiNumber">0</div>
-
-</div>
-
-<div id="aqiStatus">Good</div>
-
-</div>
-
-</section>
 
 
 
@@ -72,42 +40,54 @@ stroke-dashoffset="251"/>
 
 <div class="sensor-card">
 <h3>PM2.5</h3>
-<p id="pm25">--</p>
+<p id="pm25">0</p>
+<span id="pm25Status">Good</span>
 </div>
 
 <div class="sensor-card">
 <h3>PM10</h3>
-<p id="pm10">--</p>
+<p id="pm10">0</p>
+<span id="pm10Status">Good</span>
 </div>
 
 <div class="sensor-card">
 <h3>CO</h3>
-<p id="co">--</p>
+<p id="co">0</p>
+<span id="coStatus">Good</span>
 </div>
 
 <div class="sensor-card">
 <h3>VOC</h3>
-<p id="voc">--</p>
+<p id="voc">0</p>
+<span id="vocStatus">Good</span>
 </div>
 
 <div class="sensor-card">
 <h3>SO₂</h3>
-<p id="so2">--</p>
+<p id="so2">0</p>
+<span id="so2Status">Good</span>
 </div>
 
 <div class="sensor-card">
 <h3>NO₂</h3>
-<p id="no2">--</p>
+<p id="no2">0</p>
+<span id="no2Status">Good</span>
 </div>
 
 <div class="sensor-card">
 <h3>NH₃</h3>
-<p id="nh3">--</p>
+<p id="nh3">0</p>
+<span id="nh3Status">Good</span>
 </div>
 
 <div class="sensor-card">
 <h3>Temperature</h3>
-<p id="temp">--</p>
+<p id="temp">0</p>
+</div>
+
+<div class="sensor-card">
+<h3>Humidity</h3>
+<p id="humidity">0</p>
 </div>
 
 </div>
@@ -122,15 +102,15 @@ stroke-dashoffset="251"/>
 
 <div class="graph-grid">
 
-<div class="graph-box">
+<div class="graph-card">
 <canvas id="aqiChart"></canvas>
 </div>
 
-<div class="graph-box">
+<div class="graph-card">
 <canvas id="tempChart"></canvas>
 </div>
 
-<div class="graph-box">
+<div class="graph-card">
 <canvas id="humidityChart"></canvas>
 </div>
 
@@ -140,11 +120,11 @@ stroke-dashoffset="251"/>
 
 
 
-<section class="trend-section">
+<section class="weekly-section">
 
 <h2>Weekly AQI Trend</h2>
 
-<div class="trend-graph">
+<div class="weekly-chart">
 
 <canvas id="aqiDayChart"></canvas>
 
@@ -154,38 +134,48 @@ stroke-dashoffset="251"/>
 
 
 
-<section class="awareness-section">
+<section class="aqi-scale">
+
+<h2>AQI Classification Scale</h2>
+
+<img src="aqi-scale.png" class="scale-img">
+
+</section>
+
+
+
+<section class="health-section">
 
 <h2>Health Effects of Pollutants</h2>
 
-<div class="awareness-grid">
+<div class="health-container">
 
-<div class="info-card">
+<div class="health-card">
 <h3>PM2.5 / PM10</h3>
 <p>Fine particles penetrate deep into lungs causing respiratory diseases.</p>
 </div>
 
-<div class="info-card">
+<div class="health-card">
 <h3>CO</h3>
 <p>Carbon monoxide reduces oxygen delivery in blood.</p>
 </div>
 
-<div class="info-card">
+<div class="health-card">
 <h3>VOC</h3>
 <p>Volatile organic compounds cause irritation and organ damage.</p>
 </div>
 
-<div class="info-card">
+<div class="health-card">
 <h3>NO₂</h3>
 <p>Causes breathing problems and lung irritation.</p>
 </div>
 
-<div class="info-card">
+<div class="health-card">
 <h3>SO₂</h3>
 <p>Triggers asthma and respiratory inflammation.</p>
 </div>
 
-<div class="info-card">
+<div class="health-card">
 <h3>NH₃</h3>
 <p>Irritates eyes and respiratory tract.</p>
 </div>
@@ -200,10 +190,9 @@ stroke-dashoffset="251"/>
 
 <p>Smart Air Quality Monitoring System</p>
 
-<p>Designed & Developed by @Piyush</p>
+<p>Developed by @Piyush</p>
 
 </footer>
-
 
 
 <script src="script.js"></script>
