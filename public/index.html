@@ -10,8 +10,6 @@
 
 <link rel="stylesheet" href="style.css">
 
-<link rel="icon" href="logo.png">
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
@@ -20,7 +18,7 @@
 <body>
 
 
-<header class="header">
+<header>
 
 <div class="header-left">
 
@@ -30,20 +28,9 @@
 
 </div>
 
+<div class="location">
 
-<div class="location-box">
-
-<div class="location-title">Station Location</div>
-
-<div id="locationName">Pune</div>
-
-<div class="coordinates">
-
-<span>Lat: <span id="lat">18.5204</span></span>
-
-<span>Lon: <span id="lon">73.8567</span></span>
-
-</div>
+📍 Sangli
 
 </div>
 
@@ -51,60 +38,78 @@
 
 
 
+<section class="overall-aqi">
+
+<div class="aqi-card-large" id="aqiCard">
+
+<h2>Overall AQI</h2>
+
+<div id="aqiValue" class="aqi-number">0</div>
+
+<div id="aqiStatus" class="aqi-status">Good</div>
+
+</div>
+
+</section>
+
+
+
 <section class="sensor-section">
 
 <div class="sensor-grid">
 
-<div class="sensor-card" id="card-pm25">
+<div class="sensor-card">
 <h3>PM2.5</h3>
 <p id="pm25">0</p>
-<span id="pm25Status">Good</span>
+<span>µg/m³</span>
 </div>
 
-<div class="sensor-card" id="card-pm10">
+<div class="sensor-card">
 <h3>PM10</h3>
 <p id="pm10">0</p>
-<span id="pm10Status">Good</span>
+<span>µg/m³</span>
 </div>
 
-<div class="sensor-card" id="card-co">
+<div class="sensor-card">
 <h3>CO</h3>
 <p id="co">0</p>
-<span id="coStatus">Good</span>
+<span>ppm</span>
 </div>
 
-<div class="sensor-card" id="card-voc">
+<div class="sensor-card">
 <h3>VOC</h3>
 <p id="voc">0</p>
-<span id="vocStatus">Good</span>
+<span>ppm</span>
 </div>
 
-<div class="sensor-card" id="card-so2">
+<div class="sensor-card">
 <h3>SO₂</h3>
 <p id="so2">0</p>
-<span id="so2Status">Good</span>
+<span>ppm</span>
 </div>
 
-<div class="sensor-card" id="card-no2">
+<div class="sensor-card">
 <h3>NO₂</h3>
 <p id="no2">0</p>
-<span id="no2Status">Good</span>
+<span>ppm</span>
 </div>
 
-<div class="sensor-card" id="card-nh3">
+<div class="sensor-card">
 <h3>NH₃</h3>
 <p id="nh3">0</p>
-<span id="nh3Status">Good</span>
+<span>ppm</span>
 </div>
 
 <div class="sensor-card">
 <h3>Temperature</h3>
 <p id="temp">0</p>
+<span>°C</span>
 </div>
 
 <div class="sensor-card">
 <h3>Humidity</h3>
-<p id="humidity">0</p>
+<p id="hum">0</p>
+<span>%</span>
 </div>
 
 </div>
@@ -113,103 +118,13 @@
 
 
 
-<section class="graph-section">
+<section class="trends">
 
-<h2>Air Quality Trends</h2>
+<h2>AQI Trend (AQI vs Time)</h2>
 
-<div class="graph-grid">
+<div class="aqi-chart-container">
 
-<div class="graph-card">
 <canvas id="aqiChart"></canvas>
-</div>
-
-<div class="graph-card">
-<canvas id="tempChart"></canvas>
-</div>
-
-<div class="graph-card">
-<canvas id="humidityChart"></canvas>
-</div>
-
-</div>
-
-</section>
-
-
-
-<section class="weekly-section">
-
-<h2>Weekly AQI Trend</h2>
-
-<div class="weekly-chart">
-
-<canvas id="aqiDayChart"></canvas>
-
-</div>
-
-</section>
-
-
-
-<section class="aqi-scale-section">
-
-<h2>Air Quality Index Classification</h2>
-
-<div class="aqi-table">
-
-<div class="aqi-row header">
-<div>AQI Range</div>
-<div>Category</div>
-</div>
-
-<div class="aqi-row good"><div>0-50</div><div>Good</div></div>
-<div class="aqi-row satisfactory"><div>51-100</div><div>Satisfactory</div></div>
-<div class="aqi-row moderate"><div>101-200</div><div>Moderate</div></div>
-<div class="aqi-row poor"><div>201-300</div><div>Poor</div></div>
-<div class="aqi-row verypoor"><div>301-400</div><div>Very Poor</div></div>
-<div class="aqi-row severe"><div>401-500</div><div>Severe</div></div>
-
-</div>
-
-</section>
-
-
-
-<section class="health-section">
-
-<h2>Health Effects of Pollutants</h2>
-
-<div class="health-container">
-
-<div class="health-card">
-<h3>PM2.5 / PM10</h3>
-<p>Fine particles penetrate deep into lungs causing respiratory diseases.</p>
-</div>
-
-<div class="health-card">
-<h3>CO</h3>
-<p>Carbon monoxide reduces oxygen delivery in blood.</p>
-</div>
-
-<div class="health-card">
-<h3>VOC</h3>
-<p>Volatile organic compounds cause irritation and organ damage.</p>
-</div>
-
-<div class="health-card">
-<h3>NO₂</h3>
-<p>Causes breathing problems and lung irritation.</p>
-</div>
-
-<div class="health-card">
-<h3>SO₂</h3>
-<p>Triggers asthma and respiratory inflammation.</p>
-</div>
-
-<div class="health-card">
-<h3>NH₃</h3>
-<p>Irritates eyes and respiratory tract.</p>
-</div>
 
 </div>
 
@@ -220,7 +135,6 @@
 <footer>
 
 <p>Smart Air Quality Monitoring System</p>
-
 <p>Developed by @Piyush</p>
 
 </footer>
