@@ -22,11 +22,28 @@
 
 <header class="header">
 
-<div class="header-container">
+<div class="header-left">
 
 <img src="logo.png" class="logo">
 
 <h1>Air Quality & Pollution Monitoring System</h1>
+
+</div>
+
+
+<div class="location-box">
+
+<div class="location-title">Station Location</div>
+
+<div id="locationName">Pune</div>
+
+<div class="coordinates">
+
+<span>Lat: <span id="lat">18.5204</span></span>
+
+<span>Lon: <span id="lon">73.8567</span></span>
+
+</div>
 
 </div>
 
@@ -38,43 +55,43 @@
 
 <div class="sensor-grid">
 
-<div class="sensor-card">
+<div class="sensor-card" id="card-pm25">
 <h3>PM2.5</h3>
 <p id="pm25">0</p>
 <span id="pm25Status">Good</span>
 </div>
 
-<div class="sensor-card">
+<div class="sensor-card" id="card-pm10">
 <h3>PM10</h3>
 <p id="pm10">0</p>
 <span id="pm10Status">Good</span>
 </div>
 
-<div class="sensor-card">
+<div class="sensor-card" id="card-co">
 <h3>CO</h3>
 <p id="co">0</p>
 <span id="coStatus">Good</span>
 </div>
 
-<div class="sensor-card">
+<div class="sensor-card" id="card-voc">
 <h3>VOC</h3>
 <p id="voc">0</p>
 <span id="vocStatus">Good</span>
 </div>
 
-<div class="sensor-card">
+<div class="sensor-card" id="card-so2">
 <h3>SO₂</h3>
 <p id="so2">0</p>
 <span id="so2Status">Good</span>
 </div>
 
-<div class="sensor-card">
+<div class="sensor-card" id="card-no2">
 <h3>NO₂</h3>
 <p id="no2">0</p>
 <span id="no2Status">Good</span>
 </div>
 
-<div class="sensor-card">
+<div class="sensor-card" id="card-nh3">
 <h3>NH₃</h3>
 <p id="nh3">0</p>
 <span id="nh3Status">Good</span>
@@ -134,11 +151,25 @@
 
 
 
-<section class="aqi-scale">
+<section class="aqi-scale-section">
 
-<h2>AQI Classification Scale</h2>
+<h2>Air Quality Index Classification</h2>
 
-<img src="aqi-scale.png" class="scale-img">
+<div class="aqi-table">
+
+<div class="aqi-row header">
+<div>AQI Range</div>
+<div>Category</div>
+</div>
+
+<div class="aqi-row good"><div>0-50</div><div>Good</div></div>
+<div class="aqi-row satisfactory"><div>51-100</div><div>Satisfactory</div></div>
+<div class="aqi-row moderate"><div>101-200</div><div>Moderate</div></div>
+<div class="aqi-row poor"><div>201-300</div><div>Poor</div></div>
+<div class="aqi-row verypoor"><div>301-400</div><div>Very Poor</div></div>
+<div class="aqi-row severe"><div>401-500</div><div>Severe</div></div>
+
+</div>
 
 </section>
 
