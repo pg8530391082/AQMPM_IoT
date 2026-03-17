@@ -1,4 +1,3 @@
-// ================= AQI COLOR FUNCTION =================
 function getAQIColor(aqi) {
   if (aqi <= 50) return "#22c55e";      // Green
   if (aqi <= 100) return "#eab308";     // Yellow
@@ -61,34 +60,36 @@ async function fetchData() {
     const response = await fetch("/data");
     const data = await response.json();
 
-    const aqi = data.aqi;
+    const aqi = data.aqi ?? 0;
 
     // ---------- OVERALL AQI ----------
     document.getElementById("aqiValue").innerText = aqi;
-    document.getElementById("aqiStatus").innerText = data.category;
+    document.getElementById("aqiStatus").innerText = data.category ?? "-";
 
     let color = getAQIColor(aqi);
 
     const card = document.getElementById("aqiCard");
     card.style.borderLeft = "10px solid " + color;
 
-    // ---------- SENSOR CARDS (AQI VALUES) ----------
-    document.getElementById("pm25").innerText = data.aqi_pm25;
-    document.getElementById("pm10").innerText = data.aqi_pm10;
+    // ---------- SENSOR VALUES (FIXED MAPPING) ----------
+    // Now using AQI values instead of ppm (as per your system)
 
-    document.getElementById("co").innerText = data.aqi_co;
-    document.getElementById("voc").innerText = data.aqi_voc;
-    document.getElementById("so2").innerText = data.aqi_so2;
-    document.getElementById("no2").innerText = data.aqi_no2;
+    document.getElementById("pm25").innerText = data.aqi_pm25 ?? 0;
+    document.getElementById("pm10").innerText = data.aqi_pm10 ?? 0;
 
-    // NH3 (ppm)
-    document.getElementById("nh3").innerText = data.nh3_ppm;
+    document.getElementById("co").innerText = data.aqi_co ?? 0;
+    document.getElementById("voc").innerText = data.aqi_voc ?? 0;
+    document.getElementById("so2").innerText = data.aqi_so2 ?? 0;
+    document.getElementById("no2").innerText = data.aqi_no2 ?? 0;
+
+    // NH3 stays in ppm (as you decided)
+    document.getElementById("nh3").innerText = data.nh3_ppm ?? 0;
 
     // Environmental
-    document.getElementById("temp").innerText = data.temperature;
-    document.getElementById("hum").innerText = data.humidity;
+    document.getElementById("temp").innerText = data.temperature ?? 0;
+    document.getElementById("hum").innerText = data.humidity ?? 0;
 
-    // ---------- GRAPH ----------
+    // ---------- GRAPH UPDATE ----------
     let time = new Date().toLocaleTimeString();
 
     aqiChart.data.labels.push(time);
@@ -103,9 +104,12 @@ async function fetchData() {
 
   } catch (error) {
     console.error("Error fetching data:", error);
+
+    // fallback display (no undefined)
+    document.getElementById("aqiValue").innerText = "--";
   }
 }
 
-// ================= START =================
+// ================= RUN =================
 fetchData();
 setInterval(fetchData, 20000);
