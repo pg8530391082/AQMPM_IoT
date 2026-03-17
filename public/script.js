@@ -1,3 +1,4 @@
+// ================= AQI COLOR FUNCTION =================
 function getAQIColor(aqi) {
   if (aqi <= 50) return "#22c55e";      // Green
   if (aqi <= 100) return "#eab308";     // Yellow
@@ -7,7 +8,7 @@ function getAQIColor(aqi) {
   return "#6b21a8";                     // Dark purple
 }
 
-// Chart Setup
+// ================= CHART SETUP =================
 const ctx = document.getElementById("aqiChart");
 
 const aqiChart = new Chart(ctx, {
@@ -54,7 +55,7 @@ const aqiChart = new Chart(ctx, {
   }
 });
 
-// Fetch Data
+// ================= FETCH DATA =================
 async function fetchData() {
   try {
     const response = await fetch("/data");
@@ -62,28 +63,32 @@ async function fetchData() {
 
     const aqi = data.aqi;
 
-    // Update AQI display
+    // ---------- OVERALL AQI ----------
     document.getElementById("aqiValue").innerText = aqi;
     document.getElementById("aqiStatus").innerText = data.category;
 
     let color = getAQIColor(aqi);
 
-    // Update AQI card style
     const card = document.getElementById("aqiCard");
     card.style.borderLeft = "10px solid " + color;
 
-    // Sensor values
-    document.getElementById("pm25").innerText = data.pm25;
-    document.getElementById("pm10").innerText = data.pm10;
-    document.getElementById("co").innerText = data.co;
-    document.getElementById("voc").innerText = data.voc;
-    document.getElementById("so2").innerText = data.so2;
-    document.getElementById("no2").innerText = data.no2;
-    document.getElementById("nh3").innerText = data.nh3;
+    // ---------- SENSOR CARDS (AQI VALUES) ----------
+    document.getElementById("pm25").innerText = data.aqi_pm25;
+    document.getElementById("pm10").innerText = data.aqi_pm10;
+
+    document.getElementById("co").innerText = data.aqi_co;
+    document.getElementById("voc").innerText = data.aqi_voc;
+    document.getElementById("so2").innerText = data.aqi_so2;
+    document.getElementById("no2").innerText = data.aqi_no2;
+
+    // NH3 (ppm)
+    document.getElementById("nh3").innerText = data.nh3_ppm;
+
+    // Environmental
     document.getElementById("temp").innerText = data.temperature;
     document.getElementById("hum").innerText = data.humidity;
 
-    // Graph update
+    // ---------- GRAPH ----------
     let time = new Date().toLocaleTimeString();
 
     aqiChart.data.labels.push(time);
@@ -101,6 +106,6 @@ async function fetchData() {
   }
 }
 
-// Initial + Interval
+// ================= START =================
 fetchData();
 setInterval(fetchData, 20000);
