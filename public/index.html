@@ -2,96 +2,68 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>AQMPM | Air Quality Monitoring</title>
 
 <link rel="stylesheet" href="style.css">
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
-
 
 <body>
 
-
 <header>
-
-<div class="header-left">
-
-<img src="logo.png" class="logo">
-
-<h1>Air Quality & Pollution Monitoring System</h1>
-
-</div>
-
-<div class="location">
-
-📍 Sangli
-
-</div>
-
+  <div class="header-left">
+    <img src="logo.png" class="logo">
+    <h1>Air Quality & Pollution Monitoring System</h1>
+  </div>
+  <div class="location">📍 Sangli</div>
 </header>
 
-
-
+<!-- ================= AQI ================= -->
 <section class="overall-aqi">
-
-<div class="aqi-card-large" id="aqiCard">
-
-<h2>Overall AQI</h2>
-
-<div id="aqiValue" class="aqi-number">0</div>
-
-<div id="aqiStatus" class="aqi-status">Good</div>
-
-</div>
-
+  <div class="aqi-card-large" id="aqiCard">
+    <h2>Overall AQI</h2>
+    <div id="aqiValue" class="aqi-number">0</div>
+    <div id="aqiStatus" class="aqi-status">Good</div>
+  </div>
 </section>
 
-
-
+<!-- ================= SENSOR CARDS ================= -->
 <section class="sensor-section">
+
+<h2 style="text-align:center;">Pollutant AQI (NH₃ in ppm)</h2>
 
 <div class="sensor-grid">
 
 <div class="sensor-card">
 <h3>PM2.5</h3>
 <p id="pm25">0</p>
-<span>µg/m³</span>
 </div>
 
 <div class="sensor-card">
 <h3>PM10</h3>
 <p id="pm10">0</p>
-<span>µg/m³</span>
 </div>
 
 <div class="sensor-card">
 <h3>CO</h3>
 <p id="co">0</p>
-<span>ppm</span>
 </div>
 
 <div class="sensor-card">
 <h3>VOC</h3>
 <p id="voc">0</p>
-<span>ppm</span>
 </div>
 
 <div class="sensor-card">
 <h3>SO₂</h3>
 <p id="so2">0</p>
-<span>ppm</span>
 </div>
 
 <div class="sensor-card">
 <h3>NO₂</h3>
 <p id="no2">0</p>
-<span>ppm</span>
 </div>
 
 <div class="sensor-card">
@@ -113,149 +85,62 @@
 </div>
 
 </div>
-
 </section>
 
-
-
+<!-- ================= GRAPH ================= -->
 <section class="trends">
-
 <h2>AQI Trend (AQI vs Time)</h2>
-
 <div class="aqi-chart-container">
-
 <canvas id="aqiChart"></canvas>
+</div>
+</section>
 
+<!-- ================= INFO ================= -->
+<section id="pollutants">
+<h2>Major Air Pollutants</h2>
+
+<div class="cards">
+
+<div class="card">
+<h3>PM2.5</h3>
+<p><b>Source:</b> Vehicles, burning, industries</p>
+<p><b>Effect:</b> Enters lungs, harmful to health</p>
 </div>
 
-</section>
-  <!-- POLLUTANTS INFO -->
-<section id="pollutants">
-  <h2>Major Air Pollutants</h2>
+<div class="card">
+<h3>PM10</h3>
+<p><b>Source:</b> Dust, construction</p>
+<p><b>Effect:</b> Causes breathing irritation</p>
+</div>
 
-  <div class="cards">
+<div class="card">
+<h3>CO</h3>
+<p><b>Source:</b> Incomplete combustion</p>
+<p><b>Effect:</b> Reduces oxygen in blood</p>
+</div>
 
-    <div class="card">
-      <h3>PM2.5</h3>
-      <p><b>Source:</b> Vehicles, burning, industries</p>
-      <p><b>Effect:</b> Enters lungs, harmful to health</p>
-    </div>
+<div class="card">
+<h3>NO₂</h3>
+<p><b>Source:</b> Vehicle emissions</p>
+<p><b>Effect:</b> Lung damage</p>
+</div>
 
-    <div class="card">
-      <h3>PM10</h3>
-      <p><b>Source:</b> Dust, construction</p>
-      <p><b>Effect:</b> Causes breathing irritation</p>
-    </div>
+<div class="card">
+<h3>SO₂</h3>
+<p><b>Source:</b> Industries</p>
+<p><b>Effect:</b> Causes acid rain</p>
+</div>
 
-    <div class="card">
-      <h3>CO</h3>
-      <p><b>Source:</b> Incomplete combustion</p>
-      <p><b>Effect:</b> Reduces oxygen in blood</p>
-    </div>
-
-    <div class="card">
-      <h3>NO₂</h3>
-      <p><b>Source:</b> Vehicle emissions</p>
-      <p><b>Effect:</b> Lung damage</p>
-    </div>
-
-    <div class="card">
-      <h3>SO₂</h3>
-      <p><b>Source:</b> Industries</p>
-      <p><b>Effect:</b> Causes acid rain</p>
-    </div>
-
-  </div>
+</div>
 </section>
 
-
-
-<!-- HEALTH IMPACT -->
-<section id="health">
-  <h2>Health Effects of Air Pollution</h2>
-
-  <ul class="info-list">
-    <li>Breathing problems and asthma</li>
-    <li>Lung damage</li>
-    <li>Heart diseases</li>
-    <li>Reduced immunity</li>
-  </ul>
-</section>
-
-
-
-<!-- ENVIRONMENTAL IMPACT -->
-<section id="environment">
-  <h2>Environmental Impact</h2>
-
-  <ul class="info-list">
-    <li>Global warming</li>
-    <li>Acid rain</li>
-    <li>Reduced visibility (smog)</li>
-    <li>Damage to plants and ecosystems</li>
-  </ul>
-</section>
-
-
-
-<!-- AQI SCALE -->
-<section id="aqi-scale">
-  <h2>AQI Classification Scale</h2>
-  <p>Based on National Air Quality Index (India)</p>
-
-  <div class="aqi-table">
-
-    <div class="row good">
-      <div>0–50</div>
-      <div>Good</div>
-      <div>Minimal impact</div>
-    </div>
-
-    <div class="row moderate">
-      <div>51–100</div>
-      <div>Moderate</div>
-      <div>Minor breathing discomfort</div>
-    </div>
-
-    <div class="row poor">
-      <div>101–200</div>
-      <div>Poor</div>
-      <div>Breathing discomfort to sensitive people</div>
-    </div>
-
-    <div class="row unhealthy">
-      <div>201–300</div>
-      <div>Unhealthy</div>
-      <div>Breathing discomfort to most people</div>
-    </div>
-
-    <div class="row severe">
-      <div>301–400</div>
-      <div>Severe</div>
-      <div>Respiratory illness on prolonged exposure</div>
-    </div>
-
-    <div class="row hazardous">
-      <div>401–500</div>
-      <div>Hazardous</div>
-      <div>Serious health effects</div>
-    </div>
-
-  </div>
-</section>
-
-
-
+<!-- ================= FOOTER ================= -->
 <footer>
-
 <p>Smart Air Quality Monitoring System</p>
 <p>Developed by @Piyush</p>
-
 </footer>
-
 
 <script src="script.js"></script>
 
 </body>
-
 </html>
