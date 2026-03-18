@@ -74,16 +74,15 @@ async function fetchData() {
     // ---------- SENSOR VALUES (FIXED MAPPING) ----------
     // Now using AQI values instead of ppm (as per your system)
 
-    document.getElementById("pm25").innerText = data.aqi_pm25 ?? 0;
-    document.getElementById("pm10").innerText = data.aqi_pm10 ?? 0;
+    document.getElementById("pm25").innerText = data.pm25 ?? 0;
+    document.getElementById("pm10").innerText = data.pm10 ?? 0;
 
-    document.getElementById("co").innerText = data.aqi_co ?? 0;
-    document.getElementById("voc").innerText = data.aqi_voc ?? 0;
-    document.getElementById("so2").innerText = data.aqi_so2 ?? 0;
-    document.getElementById("no2").innerText = data.aqi_no2 ?? 0;
+    document.getElementById("co").innerText = data.co ?? 0;
+    document.getElementById("voc").innerText = data.voc ?? 0;
+document.getElementById("so2").innerText = data.so2 ?? 0;
+document.getElementById("no2").innerText = data.no2 ?? 0;
 
-    // NH3 stays in ppm (as you decided)
-    document.getElementById("nh3").innerText = data.nh3_ppm ?? 0;
+document.getElementById("nh3").innerText = data.nh3 ?? 0;;
 
     // Environmental
     document.getElementById("temp").innerText = data.temperature ?? 0;
