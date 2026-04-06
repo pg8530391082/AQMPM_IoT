@@ -108,6 +108,7 @@ function updateUI(data) {
 
   // ---------- APPLY COLORS (FULL CARD) ----------
   setCardColor("pm25", data.pm25);
+  setCardColor("pm10", data.pm10);
   setCardColor("co", data.co_aqi);
   setCardColor("voc", data.voc_aqi);
   setCardColor("so2", data.so2_aqi);
