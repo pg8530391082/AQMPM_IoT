@@ -40,6 +40,10 @@ header {
   justify-content: center;
   margin: 40px 0;
 }
+.active-card {
+  background: #d9e7e3;
+  border-left: 4px solid #22c55e;
+}
 
 .aqi-card-large {
   background: white;
