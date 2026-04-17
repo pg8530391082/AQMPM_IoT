@@ -91,8 +91,8 @@ function updateUI(data) {
   }
 
   // ---------- SENSOR VALUES ----------
-  setText("pm25", data.pm25);
-  setText("pm10", data.pm10);
+  setText("pm25", data.pm25_aqi);
+  setText("pm10", data.pm10_aqi);
 
   setText("co", data.co_aqi);
   setText("voc", data.voc_aqi);
@@ -107,8 +107,8 @@ function updateUI(data) {
   setText("hum", data.hum);
 
   // ---------- APPLY COLORS (FULL CARD) ----------
-  setCardColor("pm25", data.pm25);
-  setCardColor("pm10", data.pm10);
+  setCardColor("pm25", data.pm25_aqi);
+  setCardColor("pm10", data.pm10_aqi);
   setCardColor("co", data.co_aqi);
   setCardColor("voc", data.voc_aqi);
   setCardColor("so2", data.so2_aqi);
