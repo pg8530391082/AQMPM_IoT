@@ -15,7 +15,40 @@ function setText(id, value) {
   const el = document.getElementById(id);
   if (!el) return;
 
-  el.innerText = (value !== undefined && value !== null) ? value : "--";
+  if (value === undefined || value === null || value === "--") {
+    el.innerText = "--";
+    return;
+  }
+
+  const newValue = Number(value);
+
+  if (isNaN(newValue)) {
+    el.innerText = value;
+    return;
+  }
+
+  const oldValue = Number(el.innerText) || 0;
+
+  animateValue(el, oldValue, newValue, 600);
+}
+function animateValue(element, start, end, duration) {
+  let startTime = null;
+
+  function update(currentTime) {
+    if (!startTime) startTime = currentTime;
+
+    const progress = Math.min((currentTime - startTime) / duration, 1);
+
+    const current = Math.round(start + (end - start) * progress);
+
+    element.innerText = current;
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    }
+  }
+
+  requestAnimationFrame(update);
 }
 
 //  CARD COLOR APPLY (FIXED) 
