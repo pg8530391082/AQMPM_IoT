@@ -38,13 +38,36 @@ header {
 }
 
 .overall-aqi {
+  position: relative;
   display: flex;
   justify-content: center;
-  margin: 40px 0;
+  align-items: center;
+
+  min-height: 520px;
+  margin: 0;
+  overflow: hidden;
+}
+
+
+.overall-aqi::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background: url("sangli-map.jpg") center center / cover no-repeat;
+
+  filter: blur(3px) grayscale(70%);
+  transform: scale(1.05);
+  opacity: 0.55;
+}
+
+.overall-aqi > * {
+  position: relative;
+  z-index: 2;
 }
 .active-card {
-  background: #d9e7e3;
-  border-left: 4px solid #22c55e;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(10px);
 }
 
 .aqi-card-large {
