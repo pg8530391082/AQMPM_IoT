@@ -15,8 +15,8 @@ app.use(express.static(path.join(__dirname, "public")));
 let sensorData = {
   aqi: 0,
   category: "No Data",
-  pm25: 0,
-  pm10: 0,
+  pm25_aqi: 0,
+  pm10_aqi: 0,
   co_aqi: 0,
   voc_aqi: 0,
   so2_aqi: 0,
