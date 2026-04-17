@@ -1,4 +1,4 @@
-// ================= AQI COLOR =================
+//AQI COLOR 
 function getAQIColor(aqi) {
   aqi = Number(aqi) || 0;
 
@@ -10,7 +10,7 @@ function getAQIColor(aqi) {
   return "#6b21a8";
 }
 
-// ================= SAFE DOM UPDATE =================
+//  SAFE DOM UPDATE 
 function setText(id, value) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -18,7 +18,7 @@ function setText(id, value) {
   el.innerText = (value !== undefined && value !== null) ? value : "--";
 }
 
-// ================= CARD COLOR APPLY (FIXED) =================
+//  CARD COLOR APPLY (FIXED) 
 function setCardColor(id, value) {
 
   const valueEl = document.getElementById(id);
@@ -33,13 +33,13 @@ function setCardColor(id, value) {
   valueEl.style.color = color;
   valueEl.style.fontWeight = "bold";
 
-  // 🔥 FULL CARD STYLING
+  //  FULL CARD STYLING
   card.style.borderLeft = `6px solid ${color}`;
   card.style.backgroundColor = color + "15"; // light background
   card.style.transition = "0.3s ease";
 }
 
-// ================= CHART SETUP =================
+//  CHART SETUP 
 const ctx = document.getElementById("aqiChart");
 
 const aqiChart = new Chart(ctx, {
@@ -65,8 +65,8 @@ const aqiChart = new Chart(ctx, {
     },
     scales: {
       y: {
-        min: 0,
-        max: 500,
+         min: 0,
+         max: 100,
         title: { display: true, text: "AQI" }
       },
       x: {
@@ -76,12 +76,12 @@ const aqiChart = new Chart(ctx, {
   }
 });
 
-// ================= UPDATE UI =================
+//  UPDATE UI 
 function updateUI(data) {
 
   const aqi = data.aqi ?? 0;
 
-  // ---------- OVERALL AQI ----------
+  //  OVERALL AQI 
   setText("aqiValue", aqi);
   setText("aqiStatus", data.category ?? "-");
 
@@ -90,7 +90,7 @@ function updateUI(data) {
     aqiCard.style.borderLeft = `10px solid ${getAQIColor(aqi)}`;
   }
 
-  // ---------- SENSOR VALUES ----------
+  // SENSOR VALUES 
   setText("pm25", data.pm25_aqi);
   setText("pm10", data.pm10_aqi);
 
@@ -102,11 +102,9 @@ function updateUI(data) {
   setText("nh3", data.nh3_ppm);
   setText("alcoholAQI", data.alcohol_aqi);
 
-  // ---------- ENVIRONMENT ----------
+  //  ENVIRONMENT 
   setText("temp", data.temp);
-  setText("hum", data.hum);
-
-  // ---------- APPLY COLORS (FULL CARD) ----------
+  setText("hum", data.hum); 
   setCardColor("pm25", data.pm25_aqi);
   setCardColor("pm10", data.pm10_aqi);
   setCardColor("co", data.co_aqi);
@@ -115,11 +113,10 @@ function updateUI(data) {
   setCardColor("no2", data.no2_aqi);
   setCardColor("alcoholAQI", data.alcohol_aqi);
 
-  // ---------- GRAPH ----------
+  //  GRAPH 
   updateChart(aqi);
 }
 
-// ================= UPDATE CHART =================
 function updateChart(aqi) {
 
   const time = new Date().toLocaleTimeString();
@@ -131,11 +128,23 @@ function updateChart(aqi) {
     aqiChart.data.labels.shift();
     aqiChart.data.datasets[0].data.shift();
   }
+  let maxAQI = Math.max(...aqiChart.data.datasets[0].data);
+
+  let dynamicMax = 100;
+
+  if (maxAQI > 80) dynamicMax = 150;
+  if (maxAQI > 130) dynamicMax = 200;
+  if (maxAQI > 180) dynamicMax = 250;
+  if (maxAQI > 230) dynamicMax = 300;
+  if (maxAQI > 280) dynamicMax = 400;
+  if (maxAQI > 380) dynamicMax = 500;
+
+  aqiChart.options.scales.y.max = dynamicMax;
 
   aqiChart.update();
 }
 
-// ================= FETCH DATA =================
+// FETCH DATA 
 async function fetchData() {
 
   try {
