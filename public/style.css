@@ -56,9 +56,9 @@ header {
 
   background: url("sangli-map.png") center center / cover no-repeat;
 
-  filter: blur(3px) grayscale(70%);
+  filter: blur(1.2px) grayscale(40%);
   transform: scale(1.05);
-  opacity: 0.55;
+  opacity: 0.72;
 }
 
 .overall-aqi > * {
