@@ -157,4 +157,4 @@ async function fetchData() {
 
 // ================= RUN =================
 fetchData();
-setInterval(fetchData, 20000);
+setInterval(fetchData, 2000);
