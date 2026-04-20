@@ -236,25 +236,6 @@ async function fetchData() {
     setText("aqiStatus", "Disconnected");
   }
 }
-.value-updated {
-  animation: pulseUpdate 0.55s ease;
-}
 
-@keyframes pulseUpdate {
-  0% {
-    transform: scale(1);
-    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
-  }
-
-  50% {
-    transform: scale(1.03);
-    box-shadow: 0 0 22px rgba(34,197,94,0.35);
-  }
-
-  100% {
-    transform: scale(1);
-    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
-  }
-}
 fetchData();
 setInterval(fetchData, 2000);
