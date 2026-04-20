@@ -145,44 +145,103 @@
 </section>
 
 <!-- ================= INFO ================= -->
-<section id="pollutants">
-<h2>Major Air Pollutants</h2>
+<section id="air-guide">
 
-<div class="cards">
+<h2>Air Quality Guide</h2>
+<p class="guide-sub">Understand AQI categories and pollutants</p>
 
-<div class="card">
-<h3>PM2.5</h3>
-<p><b>Source:</b> Vehicles, burning, industries</p>
-<p><b>Effect:</b> Enters lungs, harmful to health</p>
+<div class="guide-tabs">
+<button class="tab-btn active" onclick="openTab(event,'aqi')">AQI</button>
+<button class="tab-btn" onclick="openTab(event,'pm25')">PM2.5</button>
+<button class="tab-btn" onclick="openTab(event,'pm10')">PM10</button>
+<button class="tab-btn" onclick="openTab(event,'co')">CO</button>
+<button class="tab-btn" onclick="openTab(event,'no2')">NO₂</button>
+<button class="tab-btn" onclick="openTab(event,'so2')">SO₂</button>
+<button class="tab-btn" onclick="openTab(event,'voc')">VOC</button>
+<button class="tab-btn" onclick="openTab(event,'nh3')">NH₃</button>
 </div>
 
-<div class="card">
+<!-- AQI -->
+<div id="aqi" class="tab-content active-tab">
+<div class="aqi-guide-row good"><span>0–50</span><span>Good</span><span>Safe outdoor activities</span></div>
+<div class="aqi-guide-row moderate"><span>51–100</span><span>Moderate</span><span>Sensitive caution</span></div>
+<div class="aqi-guide-row poor"><span>101–200</span><span>Poor</span><span>Reduce outdoor exposure</span></div>
+<div class="aqi-guide-row unhealthy"><span>201–300</span><span>Unhealthy</span><span>Avoid prolonged stay outside</span></div>
+<div class="aqi-guide-row severe"><span>301–400</span><span>Severe</span><span>Stay indoors</span></div>
+<div class="aqi-guide-row hazardous"><span>401–500</span><span>Hazardous</span><span>Health emergency</span></div>
+</div>
+
+<!-- PM2.5 -->
+<div id="pm25" class="tab-content">
+<div class="pollutant-box">
+<h3>PM2.5</h3>
+<p><b>Source:</b> Smoke, burning, traffic</p>
+<p><b>Effect:</b> Enters lungs deeply</p>
+<p><b>Tip:</b> Avoid dusty roads</p>
+</div>
+</div>
+
+<!-- PM10 -->
+<div id="pm10" class="tab-content">
+<div class="pollutant-box">
 <h3>PM10</h3>
 <p><b>Source:</b> Dust, construction</p>
-<p><b>Effect:</b> Causes breathing irritation</p>
+<p><b>Effect:</b> Throat irritation</p>
+<p><b>Tip:</b> Use mask outdoors</p>
+</div>
 </div>
 
-<div class="card">
+<!-- CO -->
+<div id="co" class="tab-content">
+<div class="pollutant-box">
 <h3>CO</h3>
 <p><b>Source:</b> Incomplete combustion</p>
 <p><b>Effect:</b> Reduces oxygen in blood</p>
+<p><b>Tip:</b> Improve ventilation</p>
+</div>
 </div>
 
-<div class="card">
+<!-- NO2 -->
+<div id="no2" class="tab-content">
+<div class="pollutant-box">
 <h3>NO₂</h3>
-<p><b>Source:</b> Vehicle emissions</p>
-<p><b>Effect:</b> Lung damage</p>
+<p><b>Source:</b> Vehicle exhaust</p>
+<p><b>Effect:</b> Lung irritation</p>
+<p><b>Tip:</b> Avoid traffic zones</p>
+</div>
 </div>
 
-<div class="card">
+<!-- SO2 -->
+<div id="so2" class="tab-content">
+<div class="pollutant-box">
 <h3>SO₂</h3>
 <p><b>Source:</b> Industries</p>
-<p><b>Effect:</b> Causes acid rain</p>
+<p><b>Effect:</b> Breathing discomfort</p>
+<p><b>Tip:</b> Stay indoors if high</p>
+</div>
 </div>
 
+<!-- VOC -->
+<div id="voc" class="tab-content">
+<div class="pollutant-box">
+<h3>VOC</h3>
+<p><b>Source:</b> Paint, perfumes, chemicals</p>
+<p><b>Effect:</b> Headache, irritation</p>
+<p><b>Tip:</b> Keep rooms ventilated</p>
 </div>
+</div>
+
+<!-- NH3 -->
+<div id="nh3" class="tab-content">
+<div class="pollutant-box">
+<h3>NH₃</h3>
+<p><b>Source:</b> Fertilizers, waste</p>
+<p><b>Effect:</b> Eye irritation</p>
+<p><b>Tip:</b> Avoid prolonged exposure</p>
+</div>
+</div>
+
 </section>
-
 <!-- ================= FOOTER ================= -->
 <footer>
 <p>Smart Air Quality Monitoring System</p>
