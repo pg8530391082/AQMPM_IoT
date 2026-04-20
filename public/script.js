@@ -239,6 +239,7 @@ async function fetchData() {
 
 fetchData();
 setInterval(fetchData, 2000);
+
 function openTab(evt, tabName){
 
 document.querySelectorAll(".tab-content").forEach(tab=>{
@@ -249,7 +250,8 @@ document.querySelectorAll(".tab-btn").forEach(btn=>{
 btn.classList.remove("active");
 });
 
-document.getElementById(tabName).style.display="block";
+const target = document.getElementById(tabName);
+if(target) target.style.display = "block";
 evt.currentTarget.classList.add("active");
 }
 
