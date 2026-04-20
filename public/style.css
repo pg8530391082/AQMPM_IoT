@@ -214,9 +214,11 @@ box-shadow:0 8px 20px rgba(0,0,0,0.08);
 
 .tab-content{
 display:none;
-max-width:1000px;
+max-width:1100px;
+width:92%;
 margin:20px auto 0;
-padding:10px;
+padding:0;
+box-sizing:border-box;
 }
 
 .tab-content.active-tab{
@@ -228,11 +230,10 @@ display:grid;
 grid-template-columns:180px 220px 1fr;
 gap:10px;
 padding:20px 28px;
-margin:18px auto;
+margin:16px 0;
 border-radius:18px;
 font-weight:700;
-max-width:1100px;
-width:92%;
+width:100%;
 align-items:center;
 text-align:center;
 box-sizing:border-box;
