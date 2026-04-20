@@ -242,11 +242,14 @@ setInterval(fetchData, 2000);
 
 function openTab(evt, tabName){
 
-document.querySelectorAll(".tab-content").forEach(tab=>{
+const allTabs = document.querySelectorAll(".tab-content");
+const allButtons = document.querySelectorAll(".tab-btn");
+
+allTabs.forEach(tab=>{
 tab.classList.remove("active-tab");
 });
 
-document.querySelectorAll(".tab-btn").forEach(btn=>{
+allButtons.forEach(btn=>{
 btn.classList.remove("active");
 });
 
