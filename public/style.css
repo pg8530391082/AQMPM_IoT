@@ -184,6 +184,12 @@ justify-content:flex-start;
 gap:12px;
 padding-bottom:8px;
 scrollbar-width:none;
+
+scroll-behavior:smooth;
+-webkit-overflow-scrolling:touch;
+}
+.guide-tabs::-webkit-scrollbar{
+display:none;
 }
 
 .tab-btn{
