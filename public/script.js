@@ -243,7 +243,7 @@ setInterval(fetchData, 2000);
 function openTab(evt, tabName){
 
 document.querySelectorAll(".tab-content").forEach(tab=>{
-tab.style.display="none";
+tab.classList.remove("active-tab");
 });
 
 document.querySelectorAll(".tab-btn").forEach(btn=>{
@@ -251,7 +251,11 @@ btn.classList.remove("active");
 });
 
 const target = document.getElementById(tabName);
-if(target) target.style.display = "block";
+
+if(target){
+target.classList.add("active-tab");
+}
+
 evt.currentTarget.classList.add("active");
 }
 
