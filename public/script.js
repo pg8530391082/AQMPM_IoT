@@ -221,7 +221,7 @@ function updateChart(aqi) {
 async function fetchData() {
 
   try {
-    const response = await fetch("/data");
+    const response = await fetch("/data?t=" + Date.now());
 
     if (!response.ok) throw new Error("Server error");
 
@@ -239,3 +239,21 @@ async function fetchData() {
 
 fetchData();
 setInterval(fetchData, 2000);
+function openTab(evt, tabName){
+
+document.querySelectorAll(".tab-content").forEach(tab=>{
+tab.style.display="none";
+});
+
+document.querySelectorAll(".tab-btn").forEach(btn=>{
+btn.classList.remove("active");
+});
+
+document.getElementById(tabName).style.display="block";
+evt.currentTarget.classList.add("active");
+}
+
+document.addEventListener("DOMContentLoaded", ()=>{
+const firstTab = document.querySelector(".tab-btn");
+if(firstTab) firstTab.click();
+});
