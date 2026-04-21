@@ -33,20 +33,83 @@ let sensorData = {
 function saveHistory(data) {
   try {
     let history = [];
+    let archive = [];
 
     if (fs.existsSync(historyPath)) {
       const file = fs.readFileSync(historyPath, "utf8");
       history = file ? JSON.parse(file) : [];
     }
 
-    history.push(data);
+    const archivePath = path.join(__dirname, "data", "archive.json");
 
-    /* Keep only latest 10000 records */
-    if (history.length > 10000) {
-      history = history.slice(-10000);
+    if (fs.existsSync(archivePath)) {
+      const file2 = fs.readFileSync(archivePath, "utf8");
+      archive = file2 ? JSON.parse(file2) : [];
     }
 
-    fs.writeFileSync(historyPath, JSON.stringify(history, null, 2));
+    history.push(data);
+
+    /* ---------- SMART ARCHIVE ---------- */
+    if (history.length > 10000) {
+
+      const oldData = history.slice(0, 5000);
+      history = history.slice(5000);
+
+      const hourly = {};
+
+      oldData.forEach(row => {
+        const dt = new Date(row.time);
+
+        const key =
+          dt.getFullYear() + "-" +
+          String(dt.getMonth() + 1).padStart(2, "0") + "-" +
+          String(dt.getDate()).padStart(2, "0") + " " +
+          String(dt.getHours()).padStart(2, "0");
+
+        if (!hourly[key]) {
+          hourly[key] = [];
+        }
+
+        hourly[key].push(row);
+      });
+
+      Object.keys(hourly).forEach(key => {
+        const rows = hourly[key];
+
+        const avgAQI =
+          rows.reduce((s, x) => s + x.aqi, 0) / rows.length;
+
+        const avgTemp =
+          rows.reduce((s, x) => s + x.temp, 0) / rows.length;
+
+        const avgHum =
+          rows.reduce((s, x) => s + x.hum, 0) / rows.length;
+
+        const maxAQI = Math.max(...rows.map(x => x.aqi));
+        const minAQI = Math.min(...rows.map(x => x.aqi));
+
+        archive.push({
+          hour: key,
+          avgAQI: Number(avgAQI.toFixed(1)),
+          avgTemp: Number(avgTemp.toFixed(1)),
+          avgHum: Number(avgHum.toFixed(1)),
+          maxAQI,
+          minAQI,
+          samples: rows.length
+        });
+      });
+
+      fs.writeFileSync(
+        archivePath,
+        JSON.stringify(archive, null, 2)
+      );
+    }
+
+    fs.writeFileSync(
+      historyPath,
+      JSON.stringify(history, null, 2)
+    );
+
   } catch (err) {
     console.log("❌ History save error:", err);
   }
