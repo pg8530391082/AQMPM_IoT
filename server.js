@@ -188,6 +188,9 @@ app.get("/report", async (req, res) => {
     const weekData = history.filter(
       x => new Date(x.time) >= cutoff
     );
+    if (weekData.length === 0) {
+    return res.status(404).send("No data in last 7 days");
+    }
 
     /* ---------------- SUMMARY ---------------- */
     const avgAQI =
