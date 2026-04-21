@@ -98,7 +98,7 @@ app.post("/update", (req, res) => {
 app.get("/data", (req, res) => {
   res.json(sensorData);
 });
-app.get("/report", (req, res) => {
+app.get("/report", async (req, res) => {
   try {
     let history = [];
 
@@ -107,28 +107,121 @@ app.get("/report", (req, res) => {
       history = file ? JSON.parse(file) : [];
     }
 
-    const records = history.filter(x => x.aqi > 0);
+    /* ---------------- CLEAN DATA ---------------- */
+    history = history.filter(
+      x => x.aqi > 0 && x.temp > 0 && x.hum >= 0
+    );
 
+    if (history.length === 0) {
+      return res.status(404).send("No valid history data found.");
+    }
+
+    /* ---------------- LAST 7 DAYS ---------------- */
+    const now = new Date();
+    const cutoff = new Date();
+    cutoff.setDate(now.getDate() - 7);
+
+    const weekData = history.filter(
+      x => new Date(x.time) >= cutoff
+    );
+
+    /* ---------------- SUMMARY ---------------- */
     const avgAQI =
-      records.reduce((sum, row) => sum + row.aqi, 0) / (records.length || 1);
+      weekData.reduce((sum, x) => sum + x.aqi, 0) / weekData.length;
 
-    const maxAQI = Math.max(...records.map(x => x.aqi), 0);
-    const minAQI = Math.min(...records.map(x => x.aqi), 0);
+    const maxAQI = Math.max(...weekData.map(x => x.aqi));
+    const minAQI = Math.min(...weekData.map(x => x.aqi));
 
+    /* ---------------- DAILY AVG AQI ---------------- */
+    const dailyMap = {};
+
+    weekData.forEach(row => {
+      const d = new Date(row.time).toLocaleDateString("en-GB");
+
+      if (!dailyMap[d]) dailyMap[d] = [];
+      dailyMap[d].push(row.aqi);
+    });
+
+    const dayLabels = Object.keys(dailyMap);
+    const dayValues = dayLabels.map(
+      d =>
+        dailyMap[d].reduce((a, b) => a + b, 0) /
+        dailyMap[d].length
+    );
+
+    /* ---------------- SAMPLE DATA ---------------- */
+    const sample = weekData.filter((_, i) => i % 60 === 0);
+
+    const tempScatter = sample.map(x => ({
+      x: x.temp,
+      y: x.aqi
+    }));
+
+    const humScatter = sample.map(x => ({
+      x: x.hum,
+      y: x.aqi
+    }));
+
+    /* ---------------- AQI > 70 ---------------- */
+    const alerts = weekData.filter(x => x.aqi > 70).slice(-15);
+
+    /* ---------------- CHART URLS ---------------- */
+
+    const chart1 =
+      "https://quickchart.io/chart?c=" +
+      encodeURIComponent(JSON.stringify({
+        type: "bar",
+        data: {
+          labels: dayLabels,
+          datasets: [{
+            label: "Avg AQI",
+            data: dayValues
+          }]
+        }
+      }));
+
+    const chart2 =
+      "https://quickchart.io/chart?c=" +
+      encodeURIComponent(JSON.stringify({
+        type: "scatter",
+        data: {
+          datasets: [{
+            label: "Temp vs AQI",
+            data: tempScatter
+          }]
+        }
+      }));
+
+    const chart3 =
+      "https://quickchart.io/chart?c=" +
+      encodeURIComponent(JSON.stringify({
+        type: "scatter",
+        data: {
+          datasets: [{
+            label: "Humidity vs AQI",
+            data: humScatter
+          }]
+        }
+      }));
+
+    /* ---------------- PDF ---------------- */
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
-      "attachment; filename=Weekly_AQI_Report.pdf"
+      "attachment; filename=AQI_Weekly_Report.pdf"
     );
 
     const doc = new PDFDocument({ margin: 40 });
     doc.pipe(res);
 
-    doc.fontSize(22).text("Air Quality Weekly Report", { align: "center" });
+    /* PAGE 1 */
+    doc.fontSize(24).text("Air Quality Weekly Report", {
+      align: "center"
+    });
 
     doc.moveDown();
     doc.fontSize(14).text("Location: Sangli");
-    doc.text("Generated: " + new Date().toLocaleString());
+    doc.text("Generated: " + now.toLocaleString());
 
     doc.moveDown();
     doc.fontSize(18).text("Summary");
@@ -136,15 +229,57 @@ app.get("/report", (req, res) => {
     doc.fontSize(13).text("Average AQI: " + avgAQI.toFixed(1));
     doc.text("Highest AQI: " + maxAQI);
     doc.text("Lowest AQI: " + minAQI);
-    doc.text("Valid Records: " + records.length);
+    doc.text("Valid Records: " + weekData.length);
+
+    /* PAGE 2 */
+    doc.addPage();
+    doc.fontSize(18).text("Average AQI vs Day");
+    doc.image(chart1, {
+      fit: [500, 300],
+      align: "center"
+    });
+
+    /* PAGE 3 */
+    doc.addPage();
+    doc.fontSize(18).text("AQI vs Temperature");
+    doc.image(chart2, {
+      fit: [500, 300],
+      align: "center"
+    });
 
     doc.moveDown();
-    doc.text("Generated automatically from history.json");
+    doc.fontSize(12).text(
+      "Scatterplot shows measured AQI values across temperatures."
+    );
+
+    /* PAGE 4 */
+    doc.addPage();
+    doc.fontSize(18).text("AQI vs Humidity");
+    doc.image(chart3, {
+      fit: [500, 300],
+      align: "center"
+    });
+
+    doc.moveDown();
+    doc.fontSize(12).text(
+      "Scatterplot shows measured AQI values across humidity."
+    );
+
+    /* PAGE 5 */
+    doc.addPage();
+    doc.fontSize(18).text("AQI Alerts (Above 70)");
+
+    alerts.forEach(a => {
+      doc.fontSize(12).text(
+        `${new Date(a.time).toLocaleString()}  -> AQI ${a.aqi}`
+      );
+    });
 
     doc.end();
 
   } catch (err) {
-    res.status(500).send("Failed to generate PDF");
+    console.log(err);
+    res.status(500).send("Failed to generate report.");
   }
 });
 const PORT = process.env.PORT || 3000;
