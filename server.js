@@ -69,7 +69,11 @@ app.post("/update", (req, res) => {
   console.log(sensorData);
 
   /* Ignore fake zero packets */
-  if (sensorData.aqi > 0) {
+  if (
+  sensorData.aqi > 0 &&
+  sensorData.temp > 0 &&
+  sensorData.hum >= 0
+) {
     saveHistory({
       time: new Date().toISOString(),
       aqi: sensorData.aqi,
