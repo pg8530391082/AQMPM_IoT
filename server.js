@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const fs = require("fs");
-
+const PDFDocument = require("pdfkit");
 const app = express();
 
 app.use(cors());
@@ -98,7 +98,55 @@ app.post("/update", (req, res) => {
 app.get("/data", (req, res) => {
   res.json(sensorData);
 });
+app.get("/report", (req, res) => {
+  try {
+    let history = [];
 
+    if (fs.existsSync(historyPath)) {
+      const file = fs.readFileSync(historyPath, "utf8");
+      history = file ? JSON.parse(file) : [];
+    }
+
+    const records = history.filter(x => x.aqi > 0);
+
+    const avgAQI =
+      records.reduce((sum, row) => sum + row.aqi, 0) / (records.length || 1);
+
+    const maxAQI = Math.max(...records.map(x => x.aqi), 0);
+    const minAQI = Math.min(...records.map(x => x.aqi), 0);
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=Weekly_AQI_Report.pdf"
+    );
+
+    const doc = new PDFDocument({ margin: 40 });
+    doc.pipe(res);
+
+    doc.fontSize(22).text("Air Quality Weekly Report", { align: "center" });
+
+    doc.moveDown();
+    doc.fontSize(14).text("Location: Sangli");
+    doc.text("Generated: " + new Date().toLocaleString());
+
+    doc.moveDown();
+    doc.fontSize(18).text("Summary");
+
+    doc.fontSize(13).text("Average AQI: " + avgAQI.toFixed(1));
+    doc.text("Highest AQI: " + maxAQI);
+    doc.text("Lowest AQI: " + minAQI);
+    doc.text("Valid Records: " + records.length);
+
+    doc.moveDown();
+    doc.text("Generated automatically from history.json");
+
+    doc.end();
+
+  } catch (err) {
+    res.status(500).send("Failed to generate PDF");
+  }
+});
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
