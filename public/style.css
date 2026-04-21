@@ -332,3 +332,24 @@ font-size:28px;
     box-shadow: 0 8px 18px rgba(0,0,0,0.08);
   }
 }
+.report-section{
+text-align:center;
+padding:10px 20px 50px;
+}
+
+.report-btn{
+display:inline-block;
+padding:16px 28px;
+background:#2563eb;
+color:white;
+text-decoration:none;
+font-weight:700;
+border-radius:14px;
+box-shadow:0 10px 24px rgba(37,99,235,0.25);
+transition:0.3s;
+}
+
+.report-btn:hover{
+transform:translateY(-4px);
+background:#1d4ed8;
+}
