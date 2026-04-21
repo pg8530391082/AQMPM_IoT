@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const PDFDocument = require("pdfkit");
 const app = express();
+const axios = require("axios");
 
 app.use(cors());
 app.use(express.json());
@@ -234,10 +235,8 @@ app.get("/report", async (req, res) => {
     /* PAGE 2 */
     doc.addPage();
     doc.fontSize(18).text("Average AQI vs Day");
-    doc.image(chart1, {
-      fit: [500, 300],
-      align: "center"
-    });
+    const img1 = await axios.get(chart1, { responseType: "arraybuffer" });
+    doc.image(img1.data, { fit:[500,300], align:"center" });
 
     /* PAGE 3 */
     doc.addPage();
