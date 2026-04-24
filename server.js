@@ -305,12 +305,15 @@ app.get("/report", async (req, res) => {
     doc.image(img1.data, { fit:[500,300], align:"center" });
 
     /* PAGE 3 */
-    doc.addPage();
-    doc.fontSize(18).text("AQI vs Temperature");
-    doc.image(chart2, {
-      fit: [500, 300],
-      align: "center"
-    });
+   doc.addPage();
+doc.fontSize(18).text("AQI vs Temperature");
+
+const img2 = await axios.get(chart2, { responseType: "arraybuffer" });
+
+doc.image(img2.data, {
+  fit: [500, 300],
+  align: "center"
+}););
 
     doc.moveDown();
     doc.fontSize(12).text(
@@ -318,12 +321,15 @@ app.get("/report", async (req, res) => {
     );
 
     /* PAGE 4 */
-    doc.addPage();
-    doc.fontSize(18).text("AQI vs Humidity");
-    doc.image(chart3, {
-      fit: [500, 300],
-      align: "center"
-    });
+   doc.addPage();
+doc.fontSize(18).text("AQI vs Humidity");
+
+const img3 = await axios.get(chart3, { responseType: "arraybuffer" });
+
+doc.image(img3.data, {
+  fit: [500, 300],
+  align: "center"
+});
 
     doc.moveDown();
     doc.fontSize(12).text(
@@ -339,7 +345,7 @@ app.get("/report", async (req, res) => {
         `${new Date(a.time).toLocaleString()}  -> AQI ${a.aqi}`
       );
     });
-
+    doc.on("error", err => console.log(err));
     doc.end();
 
   } catch (err) {
