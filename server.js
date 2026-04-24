@@ -345,7 +345,7 @@ doc.image(img3.data, {
         `${new Date(a.time).toLocaleString()}  -> AQI ${a.aqi}`
       );
     });
-    doc.on("error", err => console.log(err));
+    doc.on("error", err => console.log("PDF Error:", err));
     doc.end();
 
   } catch (err) {
