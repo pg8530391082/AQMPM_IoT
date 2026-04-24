@@ -313,7 +313,7 @@ const img2 = await axios.get(chart2, { responseType: "arraybuffer" });
 doc.image(img2.data, {
   fit: [500, 300],
   align: "center"
-}););
+});
 
     doc.moveDown();
     doc.fontSize(12).text(
