@@ -217,7 +217,7 @@ app.get("/report", async (req, res) => {
     );
 
     /* ---------------- SAMPLE DATA ---------------- */
-    const sample = weekData.filter((_, i) => i % 60 === 0);
+    const sample = weekData.filter((_, i) => i % 5 === 0);
 
     const tempScatter = sample.map(x => ({
       x: x.temp,
@@ -298,11 +298,25 @@ app.get("/report", async (req, res) => {
     doc.text("Lowest AQI: " + minAQI);
     doc.text("Valid Records: " + weekData.length);
 
-    /* PAGE 2 */
-    doc.addPage();
-    doc.fontSize(18).text("Average AQI vs Day");
-    const img1 = await axios.get(chart1, { responseType: "arraybuffer" });
-    doc.image(img1.data, { fit:[500,300], align:"center" });
+   /* PAGE 2 */
+doc.addPage();
+
+doc.fontSize(18).text("Average AQI vs Day", 40, 40);
+
+const img1 = await axios.get(chart1, {
+  responseType: "arraybuffer"
+});
+
+doc.image(img1.data, 40, 80, {
+  fit: [520, 280],
+  align: "center"
+});
+
+doc.fontSize(12).text(
+  "Bar chart showing daily average AQI for the last 7 days.",
+  40,
+  380
+);
 
    /* PAGE 3 */
 doc.addPage();
