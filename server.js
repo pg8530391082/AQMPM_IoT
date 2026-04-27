@@ -304,54 +304,71 @@ app.get("/report", async (req, res) => {
     const img1 = await axios.get(chart1, { responseType: "arraybuffer" });
     doc.image(img1.data, { fit:[500,300], align:"center" });
 
-    /* PAGE 3 */
-   doc.addPage();
-doc.fontSize(18).text("AQI vs Temperature");
+   /* PAGE 3 */
+doc.addPage();
 
-const img2 = await axios.get(chart2, { responseType: "arraybuffer" });
+doc.fontSize(18).text("AQI vs Temperature", 40, 40);
 
-doc.image(img2.data, {
-  fit: [500, 300],
+const img2 = await axios.get(chart2, {
+  responseType: "arraybuffer"
+});
+
+doc.image(img2.data, 40, 80, {
+  fit: [520, 280],
   align: "center"
 });
 
-    doc.moveDown();
-    doc.fontSize(12).text(
-      "Scatterplot shows measured AQI values across temperatures."
-    );
+doc.fontSize(12).text(
+  "Scatterplot showing AQI variation with temperature.",
+  40,
+  380
+);
 
-    /* PAGE 4 */
-   doc.addPage();
-doc.fontSize(18).text("AQI vs Humidity");
 
-const img3 = await axios.get(chart3, { responseType: "arraybuffer" });
+/* PAGE 4 */
+doc.addPage();
 
-doc.image(img3.data, {
-  fit: [500, 300],
+doc.fontSize(18).text("AQI vs Humidity", 40, 40);
+
+const img3 = await axios.get(chart3, {
+  responseType: "arraybuffer"
+});
+
+doc.image(img3.data, 40, 80, {
+  fit: [520, 280],
   align: "center"
 });
 
-    doc.moveDown();
-    doc.fontSize(12).text(
-      "Scatterplot shows measured AQI values across humidity."
-    );
+doc.fontSize(12).text(
+  "Scatterplot showing AQI variation with humidity.",
+  40,
+  380
+);
 
-    /* PAGE 5 */
-    doc.addPage();
-    doc.fontSize(18).text("AQI Alerts (Above 70)");
 
-    alerts.forEach(a => {
-      doc.fontSize(12).text(
-        `${new Date(a.time).toLocaleString()}  -> AQI ${a.aqi}`
-      );
-    });
-    doc.on("error", err => console.log("PDF Error:", err));
-    doc.end();
+/* PAGE 5 */
+doc.addPage();
 
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("Failed to generate report.");
-  }
+doc.fontSize(18).text("AQI Alerts (Above 70)", 40, 40);
+
+let y = 80;
+
+alerts.forEach(a => {
+  doc.fontSize(12).text(
+    `${new Date(a.time).toLocaleString()}  -> AQI ${a.aqi}`,
+    40,
+    y
+  );
+  y += 22;
+});
+
+doc.on("error", err => console.log("PDF Error:", err));
+doc.end();
+
+} catch (err) {
+  console.log(err);
+  res.status(500).send("Failed to generate report.");
+}
 });
 const PORT = process.env.PORT || 3000;
 
